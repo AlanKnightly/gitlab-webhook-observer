@@ -1,16 +1,20 @@
 var express = require('express');
-const app = express();
-const PORT = 8090;
 
+const R = require('ramda');
+const app = express();
+const PORT = 80;
+const projHookMap = require("./botWebhooks.json");
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-
-
-// respond with "hello world" when a GET request is made to the homepage
 app.post('/gitlab/hook', function (req, res) {
   //check: X-Gitlab-Token
+  const gitlabEvent = req.get('X-Gitlab-Event'); //事件
+  const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
+  const userName = R.pathOr('', ['user_name'], req.body);  //谁
 
+  const message = `${userName}刚刚在【${projName}】`;
+  const bots = projHookMap[projName];
   const payload = JSON.stringify(req.body);
   res.send(payload);
 });
