@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 
 
 // respond with "hello world" when a GET request is made to the homepage
-app.get('/gitlab/hook', function (req, res) {
+app.post('/gitlab/hook', function (req, res) {
   //check: X-Gitlab-Token
 
   const payload = JSON.stringify(req.body);

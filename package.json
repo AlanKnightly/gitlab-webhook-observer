@@ -4,7 +4,9 @@
   "description": "a gitlab-webhook-observer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start app.js --name app",
+    "stop": "pm2 stop app"
   },
   "repository": {
     "type": "git",
