@@ -15,8 +15,24 @@ app.post('/gitlab/hook', function (req, res) {
 
   const message = `${userName}刚刚在【${projName}】`;
   const bots = projHookMap[projName];
+  // bots.map(n => {
+  //   axios.post(n, {
+  //     "msgtype": "markdown",
+  //     "markdown": {
+  //       "content": `【${gitlabEvent}】\n
+  //       类型:< font color=\"comment\">用户反馈</font>`
+  //     }
+  //   })
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // });
   const payload = JSON.stringify(req.body);
-  res.send(payload);
+  console.log(payload);
+  // res.send(payload);
 });
 
 app.listen(PORT, console.log(`listen on Port: ${PORT}`));
