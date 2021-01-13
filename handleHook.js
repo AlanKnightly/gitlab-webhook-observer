@@ -36,7 +36,7 @@ const HookHandler = (req, res) => {
         const user = R.pathOr('', ['user', 'name'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-        md = ` <font color=\"info\">${user}</font> ${userName} 在 ${noteableType} [${url}](${url}) 留下了评论 `;
+        md = ` <font color=\"info\">${user}</font> ${user} 在 ${noteableType} [${url}](${url}) 留下了评论 `;
       }
       break;
     case 'issue': {
