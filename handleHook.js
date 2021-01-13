@@ -28,14 +28,14 @@ const HookHandler = (req, res) => {
       break;
     case 'push': {
       const userName = R.pathOr('', ['user_name'], req.body);
-      const title = R.pathOr('', ['commits', 'title'], req.body);
+      const title = R.pathOr('', ['commits', '0', 'title'], req.body);
       const url = R.pathOr('', ['commits', '0', 'url'], req.body);
+      const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
       const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-      md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n
-            提交者：${userName}\n
-            分支：${refs}\n
-            详情：<font color=\"info\">[${title}](${url})</font>
-          `;
+      if (totalCommitsCount) {
+        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n触发者：${userName}\n 分支：${refs}\n`;
+      }
+      md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n 分支：${refs}\n详情：<font color=\"info\">[${title}](${url})</font>`;
     }
       break;
     case 'note':
