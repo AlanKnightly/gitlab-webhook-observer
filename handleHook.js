@@ -43,7 +43,7 @@ const HookHandler = (req, res) => {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
-      md = ` ${user} 刚刚在 ${projName} 开了个issue [${issueTitle}](${issueUrl}) `;
+      md = ` ${user} 刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
     }
       break;
     default:
