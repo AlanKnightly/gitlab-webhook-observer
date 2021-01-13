@@ -1,6 +1,6 @@
 const R = require('ramda');
 const projHookMap = require("./botWebhooks.json");
-
+const axios = require('axios');
 
 const HookHandler = (req, res) => {
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
