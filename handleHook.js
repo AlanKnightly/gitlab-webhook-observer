@@ -66,7 +66,7 @@ const HookHandler = (req, res) => {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
-      const state = R.pathOr('', ['object_attributes', 'action'], req.body);
+      const state = R.pathOr('', ['object_attributes', 'state'], req.body);
       const action = R.pathOr('', ['object_attributes', 'action'], req.body);
       if (action == "close" && state == "closed") {
         md = `**${user}**在 ${projName} 关闭了issue [[${issueTitle}](${issueUrl})]`;
