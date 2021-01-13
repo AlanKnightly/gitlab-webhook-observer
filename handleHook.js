@@ -45,7 +45,16 @@ const HookHandler = (req, res) => {
         const user = R.pathOr('', ['user', 'name'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-        md = `<font color=\"warning\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
+        if (noteableType === "MergeRequest") {
+          const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
+          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个merge请求进行了评论`;
+        } else if (noteableType == "Commit") {
+          const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
+          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个commit请求进行了评论`;
+        } else if (noteableType == "Issue") {
+          const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
+          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个issue请求进行了评论`;
+        }
       }
       break;
     case 'issue': {
