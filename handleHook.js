@@ -53,12 +53,12 @@ const HookHandler = (req, res) => {
         } else if (noteableType == "Commit") {
           const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
           // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个commit请求进行了评论`;
-          md = `**${user}**对[**${reqTitle}**]这个commit请求进行了[评论](${url})`;
+          md = `**${user}**对[**${reqTitle}**]这个commit进行了[评论](${url})`;
 
         } else if (noteableType == "Issue") {
           const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
           // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个issue请求进行了评论`;
-          md = `**${user}**对[**${reqTitle}**]这个issue请求进行了[评论](${url})`;
+          md = `**${user}**对[**${reqTitle}**]这个issue进行了[评论](${url})`;
         }
       }
       break;
