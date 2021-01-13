@@ -35,7 +35,7 @@ const HookHandler = (req, res) => {
       if (totalCommitsCount) {
         md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n 分支：${refs}\n详情：<font color=\"info\">[${title}](${url})</font>`;
       } else {
-        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n 分支：${refs}\n`;
+        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n 分支：${refs}`;
       }
     }
       break;
