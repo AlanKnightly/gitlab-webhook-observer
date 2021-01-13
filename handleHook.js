@@ -47,13 +47,18 @@ const HookHandler = (req, res) => {
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
         if (noteableType === "MergeRequest") {
           const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个merge请求进行了评论`;
+          // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个merge请求进行了评论`;
+          md = `**${user}**对[**${reqTitle}**]这个merge请求进行了[评论](${url})`;
+
         } else if (noteableType == "Commit") {
           const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个commit请求进行了评论`;
+          // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个commit请求进行了评论`;
+          md = `**${user}**对[**${reqTitle}**]这个commit请求进行了[评论](${url})`;
+
         } else if (noteableType == "Issue") {
           const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-          md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个issue请求进行了评论`;
+          // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个issue请求进行了评论`;
+          md = `**${user}**对[**${reqTitle}**]这个issue请求进行了[评论](${url})`;
         }
       }
       break;
@@ -61,7 +66,9 @@ const HookHandler = (req, res) => {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
-      md = `<font color=\"warning\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
+      // md = `<font color=\"warning\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
+      md = `**${user}**刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
+
     }
       break;
     default:
