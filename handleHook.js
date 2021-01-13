@@ -32,10 +32,11 @@ const HookHandler = (req, res) => {
       const url = R.pathOr('', ['commits', '0', 'url'], req.body);
       const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
       const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-      if (totalCommitsCount == 0) {
+      if (totalCommitsCount) {
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n 分支：${refs}\n详情：<font color=\"info\">[${title}](${url})</font>`;
+      } else {
         md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n 分支：${refs}\n`;
       }
-      md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n 分支：${refs}\n详情：<font color=\"info\">[${title}](${url})</font>`;
     }
       break;
     case 'note':
