@@ -20,9 +20,9 @@ const HookHandler = (req, res) => {
       const state = R.pathOr('', ['object_attributes', 'state'], req.body);
       const action = R.pathOr('', ['object_attributes', 'action'], req.body);
       if (action == 'open') {
-        md = ` <font color=\"info\">${user}</font> 刚刚提了个merge request [${title}](${url}) , 想将分支[${srcBranch}]合并到[${targetBranch}]`; //
+        md = `项目[${projName}](${projWebUrl})刚刚收到一个merge request\n请求者：${user}\n源分支：[${srcBranch}]\n目标分支[${targetBranch}]\n详情：[${title}](${url})`; //
       } else if (action == 'merge' && state == "merged") {
-        md = `<font color=\"info\">${user}</font> 刚刚将分支[${srcBranch}]合并到[${targetBranch}]`;
+        md = `<font color=\"warning\">${user}</font> 刚刚将分支[${srcBranch}]合并到[${targetBranch}]`;
       }
     }
       break;
@@ -33,9 +33,9 @@ const HookHandler = (req, res) => {
       const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
       const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
       if (totalCommitsCount) {
-        md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n 分支：${refs}\n详情：[${title}](${url})`;
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：[${title}](${url})`;
       } else {
-        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n 分支：${refs}`;
+        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n被删除分支：${refs}`;
       }
     }
       break;
@@ -44,14 +44,14 @@ const HookHandler = (req, res) => {
         const user = R.pathOr('', ['user', 'name'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-        md = `<font color=\"info\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
+        md = `<font color=\"warning\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
       }
       break;
     case 'issue': {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
-      md = `<font color=\"info\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
+      md = `<font color=\"warning\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
     }
       break;
     default:
