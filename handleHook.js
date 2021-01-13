@@ -9,7 +9,7 @@ const HookHandler = (req, res) => {
   let md = '';
   // 根据event_type类型返回消息
   switch (eventType) {
-    case 'merge_request':
+    case 'merge_request': {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const srcBranch = R.pathOr('', ['object_attributes', 'source_branch'], req.body);
       const targetBranch = R.pathOr('', ['object_attributes', 'target_branch'], req.body);
@@ -22,24 +22,29 @@ const HookHandler = (req, res) => {
       } else if (action == 'merge' && state == "merged") {
         md = `<font color=\"info\">${user}</font> 刚刚将分支[${srcBranch}]合并到[${targetBranch}]`;
       }
+    }
       break;
-    case 'push':
+    case 'push': {
       const userName = R.pathOr('', ['user_name'], req.body);
       const title = R.pathOr('', ['commits', 'title'], req.body);
       const url = R.pathOr('', ['commits', 'url'], req.body);
       md = ` <font color=\"info\">${user}</font>${userName} 刚刚在 ${projName} 上push了个分支 [${title}](${url})`;
+    }
       break;
     case 'note':
-      const user = R.pathOr('', ['user', 'name'], req.body);
-      const url = R.pathOr('', ['object_attributes', 'url'], req.body);
-      const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-      md = ` <font color=\"info\">${user}</font> ${userName} 在 ${noteableType} [${url}](${url}) 留下了评论 `;
+      {
+        const user = R.pathOr('', ['user', 'name'], req.body);
+        const url = R.pathOr('', ['object_attributes', 'url'], req.body);
+        const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
+        md = ` <font color=\"info\">${user}</font> ${userName} 在 ${noteableType} [${url}](${url}) 留下了评论 `;
+      }
       break;
-    case 'issue':
+    case 'issue': {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
       md = ` ${user} 刚刚在 ${projName} 开了个issue [${issueTitle}](${issueUrl}) `;
+    }
       break;
     default:
       break;
