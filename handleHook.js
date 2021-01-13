@@ -30,12 +30,15 @@ const HookHandler = (req, res) => {
       const userName = R.pathOr('', ['user_name'], req.body);
       const title = R.pathOr('', ['commits', '0', 'title'], req.body);
       const url = R.pathOr('', ['commits', '0', 'url'], req.body);
+      const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
       const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
       const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-      if (totalCommitsCount) {
+
+
+      if (checkoutSha !== null) {
         md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：[${title}](${url})`;
       } else {
-        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n删除者：${userName}\n被删除分支：${refs}`;
+        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n被删除分支：${refs}\n删除者：${userName}`;
       }
     }
       break;
