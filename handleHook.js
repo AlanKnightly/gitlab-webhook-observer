@@ -5,6 +5,8 @@ const axios = require('axios');
 const HookHandler = (req, res) => {
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
+  const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
+
   const bots = projHookMap[projName];
   let md = '';
   // 根据event_type类型返回消息
@@ -18,7 +20,7 @@ const HookHandler = (req, res) => {
       const state = R.pathOr('', ['object_attributes', 'state'], req.body);
       const action = R.pathOr('', ['object_attributes', 'action'], req.body);
       if (action == 'open') {
-        md = `<font color=\"info\">${user}</font> 刚刚提了个merge request [${title}](${url}) , 想将分支[${srcBranch}]合并到[${targetBranch}]`;
+        md = ` <font color=\"info\">${user}</font> 刚刚提了个merge request [${title}](${url}) , 想将分支[${srcBranch}]合并到[${targetBranch}]`; //
       } else if (action == 'merge' && state == "merged") {
         md = `<font color=\"info\">${user}</font> 刚刚将分支[${srcBranch}]合并到[${targetBranch}]`;
       }
@@ -27,8 +29,13 @@ const HookHandler = (req, res) => {
     case 'push': {
       const userName = R.pathOr('', ['user_name'], req.body);
       const title = R.pathOr('', ['commits', 'title'], req.body);
-      const url = R.pathOr('', ['commits', 'url'], req.body);
-      md = ` <font color=\"info\">${userName}</font> 刚刚在 ${projName} 上push了个分支 [${title}](${url})`;
+      const url = R.pathOr('', ['commits', '0', 'url'], req.body);
+      const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
+      md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n
+            提交者：${userName}\n
+            分支：${refs}\n
+            详情：<font color=\"info\">[${title}](${url})</font>
+          `;
     }
       break;
     case 'note':
@@ -36,14 +43,14 @@ const HookHandler = (req, res) => {
         const user = R.pathOr('', ['user', 'name'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-        md = ` <font color=\"info\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
+        md = `<font color=\"info\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
       }
       break;
     case 'issue': {
       const user = R.pathOr('', ['user', 'name'], req.body);
       const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
       const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
-      md = ` ${user} 刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
+      md = `<font color=\"info\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
     }
       break;
     default:
@@ -57,9 +64,6 @@ const HookHandler = (req, res) => {
           "content": md,
         }
       })
-        .then(function (response) {
-          console.log(response);
-        })
         .catch(function (error) {
           console.log(error);
         });
