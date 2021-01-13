@@ -28,7 +28,7 @@ const HookHandler = (req, res) => {
       const userName = R.pathOr('', ['user_name'], req.body);
       const title = R.pathOr('', ['commits', 'title'], req.body);
       const url = R.pathOr('', ['commits', 'url'], req.body);
-      md = ` <font color=\"info\">${user}</font>${userName} 刚刚在 ${projName} 上push了个分支 [${title}](${url})`;
+      md = ` <font color=\"info\">${userName}</font> 刚刚在 ${projName} 上push了个分支 [${title}](${url})`;
     }
       break;
     case 'note':
@@ -36,7 +36,7 @@ const HookHandler = (req, res) => {
         const user = R.pathOr('', ['user', 'name'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
-        md = ` <font color=\"info\">${user}</font> ${user} 在 ${noteableType} [${url}](${url}) 留下了评论 `;
+        md = ` <font color=\"info\">${user}</font>在 ${noteableType} [${url}](${url}) 留下了评论 `;
       }
       break;
     case 'issue': {
