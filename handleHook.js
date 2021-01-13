@@ -33,10 +33,8 @@ const HookHandler = (req, res) => {
       const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
       const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
       const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-
-
       if (checkoutSha !== null) {
-        md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：[${title}](${url})`;
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
       } else {
         md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n被删除分支：${refs}\n删除者：${userName}`;
       }
