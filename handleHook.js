@@ -2,7 +2,7 @@ const R = require('ramda');
 const projHookMap = require("./botWebhooks.json");
 
 
-export const HookHandler = (req, res) => {
+const HookHandler = (req, res) => {
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const bots = projHookMap[projName];
@@ -62,3 +62,5 @@ export const HookHandler = (req, res) => {
   }
   res.send({ success: true });
 };
+
+module.exports = HookHandler;
