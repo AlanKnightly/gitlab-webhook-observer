@@ -69,9 +69,9 @@ const HookHandler = (req, res) => {
       const state = R.pathOr('', ['object_attributes', 'state'], req.body);
       const action = R.pathOr('', ['object_attributes', 'action'], req.body);
       if (action == "close" && state == "closed") {
-        md = `**${user}**在 ${projName} 关闭了issue [[${issueTitle}](${issueUrl})]`;
+        md = `**${user}**在[${projName}](${projWebUrl})关闭了issue [[${issueTitle}](${issueUrl})]`;
       } else if (action == "open" && state == "opened") {
-        md = `**${user}**在 ${projName} 新建了issue [[${issueTitle}](${issueUrl})]`;
+        md = `**${user}**在[${projName}](${projWebUrl})新建了issue [[${issueTitle}](${issueUrl})]`;
       }
       // md = `<font color=\"warning\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
     }
