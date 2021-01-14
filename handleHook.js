@@ -22,7 +22,7 @@ const HookHandler = (req, res) => {
       if (action == 'open') {
         md = `项目[${projName}](${projWebUrl})刚刚收到一个merge request\n请求者：${user}\n源分支：[${srcBranch}]\n目标分支[${targetBranch}]\n详情：[${title}](${url})`; //
       } else if (action == 'merge' && state == "merged") {
-        md = `<font color=\"warning\">${user}</font> 刚刚将分支[${srcBranch}]合并到[${targetBranch}]`;
+        md = `${user}将分支[${srcBranch}]合并到[${targetBranch}]`;
       }
     }
       break;
@@ -36,7 +36,7 @@ const HookHandler = (req, res) => {
       if (checkoutSha !== null) {
         md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
       } else {
-        md = `项目[${projName}](${projWebUrl})刚刚受理一次分支删除\n被删除分支：${refs}\n删除者：${userName}`;
+        md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支${refs}`;
       }
     }
       break;
