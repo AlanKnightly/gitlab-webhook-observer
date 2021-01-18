@@ -1,8 +1,0 @@
-{
-  "sd-react-components": [
-    "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=d3a74b5e-dcd4-43bc-9366-cf02ecab8c7d"
-  ],
-  "scp": [
-    "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=40ab1ae0-bf95-4db5-b7ee-3d9550a9b30e"
-  ]
-}

@@ -1,15 +1,13 @@
 const R = require('ramda');
-const projHookMap = require("./botWebhooks.json");
 const axios = require('axios');
 
 const HookHandler = (req, res) => {
+  const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
-
-  const bots = projHookMap[projName];
-  if (!bots) {
-    res.send({ success: true });
+  if (!key) {
+    res.send({ success: false });
   } {
     let md = '';
     // 根据event_type类型返回消息
@@ -84,17 +82,15 @@ const HookHandler = (req, res) => {
         break;
     }
     if (md) {
-      bots.map(n => {
-        axios.post(n, {
-          "msgtype": "markdown",
-          "markdown": {
-            "content": md,
-          }
-        })
-          .catch(function (error) {
-            console.log(error);
-          });
-      });
+      axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
+        "msgtype": "markdown",
+        "markdown": {
+          "content": md,
+        }
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
     res.send({ success: true });
   }
