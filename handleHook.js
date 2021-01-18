@@ -27,27 +27,32 @@ const HookHandler = (req, res) => {
         }
       }
         break;
-      case 'push': {
+      case 'tag_push': {
+        const tagName = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
         const userName = R.pathOr('', ['user_name'], req.body);
-        const title = R.pathOr('', ['commits', '0', 'title'], req.body);
+        const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
+        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], req.body);
+        const isCreate = R.pathOr('', ['before'], req.body) == '0000000000000000000000000000000000000000';
+        const isDel = R.pathOr('', ['after'], req.body) == '0000000000000000000000000000000000000000';
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n
+            ${isCreate ? `标签名：${tagName}` : ''} 
+            ${isDel ? `被删除标签名：${tagName}` : ''}
+            提交者：${userName}\n
+            详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
+      }
+        break;
+      case 'push': {
+        const userName = R.pathOr('', ['user_name'], req.body);
+        const commits = R.pathOr([], ['commits'], req.body);
+        const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
+        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], req.body);
         const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-        const isTagPush = req.get('X-Gitlab-Event') == "Tag Push Hook";
         if (checkoutSha !== null) {
-          if (isTagPush) {
-            const isCreate = R.pathOr('', ['before'], req.body) == '0000000000000000000000000000000000000000';
-            const isDel = R.pathOr('', ['after'], req.body) == '0000000000000000000000000000000000000000';
-            md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n
-            ${isCreate ? `新增tag：${tagName}` : ''} 
-            ${isDel ? '删除tag：' : ''} 
-            提交者：${userName}\n
-            详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
-          } else {
-            md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
-          }
+          md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
         } else {
           md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支${refs}`;
         }
