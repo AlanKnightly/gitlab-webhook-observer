@@ -33,14 +33,10 @@ const HookHandler = (req, res) => {
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
-        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], req.body);
+        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
         const isCreate = R.pathOr('', ['before'], req.body) == '0000000000000000000000000000000000000000';
         const isDel = R.pathOr('', ['after'], req.body) == '0000000000000000000000000000000000000000';
-        md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n
-            ${isCreate ? `标签名：${tagName}` : ''} 
-            ${isDel ? `被删除标签名：${tagName}` : ''}
-            提交者：${userName}\n
-            详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n${isCreate ? `标签名：${tagName}\n` : ''}${isDel ? `被删除标签名：${tagName}\n` : ''}提交者：${userName}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
       }
         break;
       case 'push': {
