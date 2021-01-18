@@ -43,7 +43,7 @@ const HookHandler = (req, res) => {
         const userName = R.pathOr('', ['user_name'], req.body);
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
-        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], req.body);
+        const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
         const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
