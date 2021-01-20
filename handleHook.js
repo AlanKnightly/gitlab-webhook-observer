@@ -70,15 +70,15 @@ const HookHandler = (req, res) => {
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-            md = `**${user}**对[**${reqTitle}**]这个merge请求进行了[评论](${url})` + mentioned;
+            md = `**${user}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Commit") {
             const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-            md = `**${user}**对[**${reqTitle}**]这个commit进行了[评论](${url})` + mentioned;
+            md = `**${user}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Issue") {
             const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-            md = `**${user}**对[**${reqTitle}**]这个issue进行了[评论](${url})` + mentioned;
+            md = `**${user}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
           }
         }
         break;
