@@ -66,7 +66,7 @@ const HookHandler = (req, res) => {
           const mentionMembers = desc.match(/(@\S*\s)/ig).map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
-            mentioned= `并提及了${mentionMembers.map(m => '@' + m)}`
+            mentioned= `并提及了${mentionMembers.map(m => '@' + m).join('')}`
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
