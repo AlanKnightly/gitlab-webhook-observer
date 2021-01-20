@@ -1,6 +1,6 @@
 const R = require('ramda');
 const axios = require('axios');
-
+const nameMap= require('./nameMap.json')
 const HookHandler = (req, res) => {
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
@@ -62,20 +62,23 @@ const HookHandler = (req, res) => {
           const user = R.pathOr('', ['user', 'name'], req.body);
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
+          const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
+          const mentionMembers = desc.match(/(@\S*\s)/ig).map(m=>m.trim().slice(1))
+          let mentioned = ''
+          if (mentionMembers.length){
+            mentioned= `并提及了${mentionMembers.map(m => '@' + m)}`
+          }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-            // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个merge请求进行了评论`;
-            md = `**${user}**对[**${reqTitle}**]这个merge请求进行了[评论](${url})`;
+            md = `**${user}**对[**${reqTitle}**]这个merge请求进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Commit") {
             const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-            // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个commit请求进行了评论`;
-            md = `**${user}**对[**${reqTitle}**]这个commit进行了[评论](${url})`;
+            md = `**${user}**对[**${reqTitle}**]这个commit进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Issue") {
             const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-            // md = `<font color=\"warning\">${user}</font>对[${reqTitle}](${url})这个issue请求进行了评论`;
-            md = `**${user}**对[**${reqTitle}**]这个issue进行了[评论](${url})`;
+            md = `**${user}**对[**${reqTitle}**]这个issue进行了[评论](${url})` + mentioned;
           }
         }
         break;
