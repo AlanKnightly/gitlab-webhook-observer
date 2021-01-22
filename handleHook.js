@@ -115,7 +115,7 @@ const HookHandler = (req, res) => {
           console.log(error);
         });
     }
-    res.send({ success: true, step: testIndex});
+    res.send({ success: true, md: md});
   }
 };
 
