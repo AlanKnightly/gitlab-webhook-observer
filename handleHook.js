@@ -103,7 +103,7 @@ const HookHandler = (req, res) => {
     }
     testIndex++
     if (md) {
-      testIndex++
+      testIndex=10
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
@@ -115,7 +115,7 @@ const HookHandler = (req, res) => {
           console.log(error);
         });
     }
-    res.send({ success: true, md: md});
+    res.send({ success: true, md, testIndex});
   }
 };
 
