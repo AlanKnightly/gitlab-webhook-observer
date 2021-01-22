@@ -2,13 +2,15 @@ const R = require('ramda');
 const axios = require('axios');
 const nameMap= require('./nameMap.json')
 const HookHandler = (req, res) => {
+  let testIndex  = 1
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
   if (!key) {
-    res.send({ success: false ,step:1 });
+    res.send({ success: false, step: testIndex });
   } {
+    testIndex++
     let md = '';
     // 根据event_type类型返回消息
     switch (eventType) {
@@ -99,7 +101,9 @@ const HookHandler = (req, res) => {
       default:
         break;
     }
+    testIndex++
     if (md) {
+      testIndex++
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
@@ -111,7 +115,7 @@ const HookHandler = (req, res) => {
           console.log(error);
         });
     }
-    res.send({ success: true, step: 2});
+    res.send({ success: true, step: testIndex});
   }
 };
 
