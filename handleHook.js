@@ -7,7 +7,7 @@ const HookHandler = (req, res) => {
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
   if (!key) {
-    res.send({ success: false });
+    res.send({ success: false ,step:1 });
   } {
     let md = '';
     // 根据event_type类型返回消息
@@ -101,6 +101,7 @@ const HookHandler = (req, res) => {
     }
     if (md) {
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
+                //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
         "markdown": {
           "content": md,
@@ -110,7 +111,7 @@ const HookHandler = (req, res) => {
           console.log(error);
         });
     }
-    res.send({ success: true });
+    res.send({ success: true, step: 2});
   }
 };
 
