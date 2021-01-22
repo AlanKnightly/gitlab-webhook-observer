@@ -2,15 +2,13 @@ const R = require('ramda');
 const axios = require('axios');
 const nameMap= require('./nameMap.json')
 const HookHandler = (req, res) => {
-  let testIndex  = 1
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
   if (!key) {
-    res.send({ success: false, step: testIndex });
+    res.send({ success: false });
   } {
-    testIndex++
     let md = '';
     // 根据event_type类型返回消息
     switch (eventType) {
@@ -68,7 +66,7 @@ const HookHandler = (req, res) => {
           const mentionMembers = desc.match(/(@\S*\s)/ig).map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
-            mentioned= `并提及了${mentionMembers.map(m => '@' + m).join('')}`
+            mentioned = `并提及了${mentionMembers.map(m => '@' + nameMap[m]).join('')}`
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
@@ -101,9 +99,7 @@ const HookHandler = (req, res) => {
       default:
         break;
     }
-    testIndex++
     if (md) {
-      testIndex=10
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
@@ -115,7 +111,7 @@ const HookHandler = (req, res) => {
           console.log(error);
         });
     }
-    res.send({ success: true, md, testIndex});
+    res.send({ success: true});
   }
 };
 
