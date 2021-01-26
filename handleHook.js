@@ -53,7 +53,7 @@ const HookHandler = (req, res) => {
             md = `项目[${projName}](${projWebUrl})刚刚收到一次push提交\n提交者：${userName}\n分支：${refs}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
           }
         } else {
-          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支${refs}`;
+          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
         }
       }
         break;
@@ -63,7 +63,8 @@ const HookHandler = (req, res) => {
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
-          const mentionMembers = desc.match(/(@\S*\s)/ig).map(m=>m.trim().slice(1))
+          const mentionMembers = desc.match(/(@\S*\s)/ig)|| []
+          mentionMembers.map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
             mentioned = `并提及了${mentionMembers.map(m => '@' + nameMap[m]).join('')}`
