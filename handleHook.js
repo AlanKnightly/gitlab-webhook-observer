@@ -50,8 +50,8 @@ const HookHandler = (req, res) => {
         const {  timestamp } = commits[0];
         const beforeHash =  R.pathOr('', ['before'], req.body) 
         const afterHash =  R.pathOr('', ['after'], req.body) 
-        const newBeforeHash = beforeHash.substring(before.length - 8);
-        const newAfterHash = afterHash.substring(after.length - 8);
+        const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
+        const newAfterHash = afterHash.substring(afterHash.length - 8);
         const isCreate = beforeHash == '0000000000000000000000000000000000000000';
         if (checkoutSha !== null ) {
           if (isCreate){
