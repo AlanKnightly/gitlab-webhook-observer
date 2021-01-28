@@ -63,7 +63,7 @@ const HookHandler = (req, res) => {
             > 更新时间: ${timestamp}`
           }
         } else {
-          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
+          md = `项目[${projName}](${projWebUrl})的远程分支[${refs}]已被删除`;
         }
       }
         break;
