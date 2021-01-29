@@ -14,16 +14,25 @@ const HookHandler = (req, res) => {
     switch (eventType) {
       case 'merge_request': {
         const user = R.pathOr('', ['user', 'name'], req.body);
+        const commits = R.pathOr([], ['commits'], req.body);
         const srcBranch = R.pathOr('', ['object_attributes', 'source_branch'], req.body);
         const targetBranch = R.pathOr('', ['object_attributes', 'target_branch'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
         const title = R.pathOr('', ['object_attributes', 'title'], req.body);
         const state = R.pathOr('', ['object_attributes', 'state'], req.body);
         const action = R.pathOr('', ['object_attributes', 'action'], req.body);
+        const {  timestamp } = commits[0];
         if (action == 'open') {
-          md = `项目[${projName}](${projWebUrl})刚刚收到一个merge request\n请求者：${user}\n源分支：[${srcBranch}]\n目标分支[${targetBranch}]\n详情：[${title}](${url})`; //
+          md =  `<font color="warning">${projName}项目有新的合并请求: </font>请相关同事注意。
+                  > 分支名:[${title}](${url})  
+                  > 详情: ${title} 到 ${targetBranch}
+                  > 操作人: ${user}
+                  > 更新时间: ${timestamp}`
         } else if (action == 'merge' && state == "merged") {
           md = `${user}将分支[${srcBranch}]合并到[${targetBranch}]`;
+          md =  `<font color="warning">${projName}项目有新的合并: </font>请相关同事注意。
+                  > 详情: ${user}将分支[${srcBranch}]合并到[${targetBranch}];
+                  > 更新时间: ${timestamp}`
         }
       }
         break;
@@ -50,8 +59,8 @@ const HookHandler = (req, res) => {
         const {  timestamp } = commits[0];
         const beforeHash =  R.pathOr('', ['before'], req.body) 
         const afterHash =  R.pathOr('', ['after'], req.body) 
-        const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
-        const newAfterHash = afterHash.substring(afterHash.length - 8);
+        const newBeforeHash = beforeHash.substring(before.length - 8);
+        const newAfterHash = afterHash.substring(after.length - 8);
         const isCreate = beforeHash == '0000000000000000000000000000000000000000';
         if (checkoutSha !== null ) {
           if (isCreate){
@@ -63,7 +72,7 @@ const HookHandler = (req, res) => {
             > 更新时间: ${timestamp}`
           }
         } else {
-          md = `项目[${projName}](${projWebUrl})的远程分支[${refs}]已被删除`;
+          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
         }
       }
         break;
