@@ -13,6 +13,12 @@ git clone  https://gitlab.sdbattery.com/shenjiangping/gitlab-webhook-observer.gi
 npm stop
 npm start
 ```
+### 使用gitlab推送通知
+1. 参见gitee的[webhook教程](https://gitee.com/help/articles/4296#article-header0)，创建项目小组自己的群机器人，并复制该机器人的webhook的key。
+2. 项目管理者在gitlab项目的Setting->Webhooks 界面顶部的URL表单中输入http://bot-test.sdbattery.net ping/api/gitlab/hook/key
+3. 在界面中勾选想要监听的仓库中发生的操作事件（建议全选）
+4. 页面滚动到底部，点击保存即可。
+5. 新建一个issue或在某个分支下发表评论，验证消息推送是否正常触发。
 
 #### gitlab与企业微信名称转换
 由于开发人员在gitlab与企业微信的名称不同，在gitlab上@其他成员时，可能需要将gitlab名称映射到企业微信名称。
