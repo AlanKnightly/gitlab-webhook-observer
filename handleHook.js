@@ -11,7 +11,7 @@ const HookHandler = (req, res) => {
     resBody.success=false
     resBody.step=1
     res.send(resBody);
-  } {
+  } else{
     let md = '';
     // 根据event_type类型返回消息
     switch (eventType) {
