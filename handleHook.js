@@ -6,8 +6,11 @@ const HookHandler = (req, res) => {
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
   const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
+  const resBody = {}
   if (!key) {
-    res.send({ success: false ,step:1});
+    resBody.success=false
+    resBody.step=1
+    res.send(resBody);
   } {
     let md = '';
     // 根据event_type类型返回消息
@@ -116,6 +119,9 @@ const HookHandler = (req, res) => {
         break;
     }
     if (md) {
+      resBody.success=true
+      resBody.step=2
+      resBody.hasMd=true
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
@@ -124,10 +130,14 @@ const HookHandler = (req, res) => {
         }
       })
         .catch(function (error) {
+          resBody.success=false
+          resBody.step=3
+          resBody.hasMd=true
+          resBody.em=JSON.stringify(error)
           console.log(error);
         });
     }
-    res.send({ success: true, step:2});
+    res.send(resBody);
   }
 };
 
