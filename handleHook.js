@@ -81,8 +81,8 @@ const HookHandler = (req, res) => {
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
-          const mentionMembers = desc.match(/(@\S*\s?)/ig)|| []
-          mentionMembers.map(m=>m.trim().slice(1))
+          let mentionMembers = desc.match(/(@\S*\s?)/ig)|| []
+          mentionMembers= mentionMembers.map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
             resBody.memtion = mentionMembers
