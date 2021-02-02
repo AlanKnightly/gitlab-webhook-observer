@@ -5,7 +5,7 @@ const HookHandler = (req, res) => {
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
-  const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
+  const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
   const resBody = {}
   if (!key) {
     resBody.success=false
@@ -81,11 +81,11 @@ const HookHandler = (req, res) => {
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
-          const mentionMembers = desc.match(/(@\S*\s)/ig)|| []
+          const mentionMembers = desc.match(/(@\S*\s?)/ig)|| []
           mentionMembers.map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
-            mentioned = `并提及了${mentionMembers.map(m => '@' + nameMap[m]).join('')}`
+            mentioned = `并提及了${mentionMembers.map(m =>  nameMap[m]? '@' + nameMap[m]:'@' + m ).join('')}`
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
