@@ -122,6 +122,7 @@ const HookHandler = (req, res) => {
       resBody.success=true
       resBody.step=2
       resBody.hasMd=true
+      resBody.md = md
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
