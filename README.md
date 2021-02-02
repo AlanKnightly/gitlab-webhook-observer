@@ -20,6 +20,22 @@ npm start
 4. 页面滚动到底部，点击保存即可。
 5. 新建一个issue或在某个分支下发表评论，验证消息推送是否正常触发。
 
+### 目前该脚本支持监听的gitlab事件
+
+|  Trigger(事件) | 已支持 |
+|  :---- | :----: |
+|  Push events | 已支持 |
+|  Tag push events | 已支持 |
+|  Comments | 已支持 |
+|  Confidential Comments | - |
+|  Issues events | 已支持 |
+|  Confidential Issues events | - |
+|  Merge request events | 已支持 |
+|  Job events | - |
+|  Pipeline events | - |
+|  Wiki Page events | - |
+
+
 #### gitlab与企业微信名称转换
 由于开发人员在gitlab与企业微信的名称不同，在gitlab上@其他成员时，可能需要将gitlab名称映射到企业微信名称，企业微信才能正确@到指定成员。目前暂且将名称映射写在nameMap.json文件中：
 ```
@@ -27,3 +43,6 @@ npm start
   [gitlabName]: weixinName
 }
 ```
+
+### 消息模板
+目前推送到企业微信的消息模板写死在 handleHook.js 文件中，如果各小组有差异化需求，后续可将模板抽离到单独的模板函数/文件，根据企业微信机器人的key来映射不同模板。
