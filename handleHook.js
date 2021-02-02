@@ -85,6 +85,7 @@ const HookHandler = (req, res) => {
           mentionMembers.map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
+            resBody.memtion = mentionMembers
             mentioned = `并提及了${mentionMembers.map(m =>  nameMap[m]? '@' + nameMap[m]:'@' + m ).join('')}`
           }
           if (noteableType === "MergeRequest") {
