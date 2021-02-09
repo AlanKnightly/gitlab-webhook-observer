@@ -56,11 +56,10 @@ const HookHandler = (req, res) => {
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
         const {  timestamp } = commits[0];
-        const beforeHash =  R.pathOr('', ['before'], req.body) 
-        const afterHash =  R.pathOr('', ['after'], req.body) 
+        const beforeHash =  R.pathOr(null, ['before'], req.body) 
+        const isCreate = beforeHash === '0000000000000000000000000000000000000000';
         const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
-        const newAfterHash = afterHash.substring(afterHash.length - 8);
-        const isCreate = beforeHash == '0000000000000000000000000000000000000000';
+        const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
         if (checkoutSha !== null ) {
           if (isCreate){
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
