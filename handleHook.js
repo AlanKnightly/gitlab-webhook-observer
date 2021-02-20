@@ -51,7 +51,7 @@ const HookHandler = (req, res) => {
         break;
       case 'push': {
         const userName = R.pathOr('', ['user_name'], req.body);
-        const username = R.pathOr('', ['user', 'user_username'], req.body);
+        const username = R.pathOr('', ['user_username'], req.body);
         const nickname = nameMap[username] || userName
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
