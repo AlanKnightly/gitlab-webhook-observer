@@ -59,19 +59,27 @@ const HookHandler = (req, res) => {
         const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-        const {  timestamp } = commits[0];
         const beforeHash =  R.pathOr(null, ['before'], req.body) 
         const isCreate = beforeHash === '0000000000000000000000000000000000000000';
         const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
         const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
         if (checkoutSha !== null ) {
           if (isCreate){
+            const {  timestamp } = commits[0];
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
             > 分支名: [${refs}](${projWebUrl})
             > 操作人: ${nickname}
             > 描述:${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}
             > 从 <font color="comment">${newBeforeHash}</font> 更新到 <font color="comment">${newAfterHash}</font>
             > 更新时间: ${timestamp}`
+          }else{
+            if(req.query.every_push){
+             const { url , title } = commits[0];
+              md =  `${nickname}更新了远程分支[${refs}](${projWebUrl})
+              > commit 说明: [${title}](${url}) 
+              > commit 哈希: <font color="comment">${newAfterHash}</font>
+              > 更新时间: ${timestamp}`
+            }
           }
         } else {
           md = `${nickname}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
