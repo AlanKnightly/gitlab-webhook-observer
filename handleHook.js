@@ -17,6 +17,8 @@ const HookHandler = (req, res) => {
     switch (eventType) {
       case 'merge_request': {
         const user = R.pathOr('', ['user', 'name'], req.body);
+        const username = R.pathOr('', ['user', 'username'], req.body);
+        const nickname = nameMap[username] || user
         const srcBranch = R.pathOr('', ['object_attributes', 'source_branch'], req.body);
         const targetBranch = R.pathOr('', ['object_attributes', 'target_branch'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
@@ -25,13 +27,13 @@ const HookHandler = (req, res) => {
         const action = R.pathOr('', ['object_attributes', 'action'], req.body);
         if (action == 'open') {
           md =  `<font color="warning">${projName}项目有新的合并请求: </font>请相关同事注意。
-                  > 操作人: ${user}
+                  > 操作人: ${nickname}
                   > 分支名:[${title}](${url})  
                   > 详情: ${title} 到 ${targetBranch}`
         } else if (action == 'merge' && state == "merged") {
-          md = `${user}将分支[${srcBranch}]合并到[${targetBranch}]`;
+          md = `${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`;
           md =  `<font color="warning">${projName}项目有新的合并: </font>请相关同事注意。
-                > 详情: ${user}将分支[${srcBranch}]合并到[${targetBranch}]`
+                > 详情: ${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`
         }
       }
         break;
@@ -49,6 +51,8 @@ const HookHandler = (req, res) => {
         break;
       case 'push': {
         const userName = R.pathOr('', ['user_name'], req.body);
+        const username = R.pathOr('', ['user_username'], req.body);
+        const nickname = nameMap[username] || userName
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
         const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
@@ -64,19 +68,21 @@ const HookHandler = (req, res) => {
           if (isCreate){
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
             > 分支名: [${refs}](${projWebUrl})
-            > 操作人: ${userName}
+            > 操作人: ${nickname}
             > 描述:${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}
             > 从 <font color="comment">${newBeforeHash}</font> 更新到 <font color="comment">${newAfterHash}</font>
             > 更新时间: ${timestamp}`
           }
         } else {
-          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
+          md = `${nickname}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
         }
       }
         break;
       case 'note':
         {
           const user = R.pathOr('', ['user', 'name'], req.body);
+          const username = R.pathOr('', ['user', 'username'], req.body);
+          const nickname = nameMap[username] || user
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
@@ -89,28 +95,30 @@ const HookHandler = (req, res) => {
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Commit") {
             const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Issue") {
             const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
           }
         }
         break;
       case 'issue': {
         const user = R.pathOr('', ['user', 'name'], req.body);
+        const username = R.pathOr('', ['user', 'username'], req.body);
+        const nickname = nameMap[username] || user
         const issueUrl = R.pathOr('', ['object_attributes', 'url'], req.body);
         const issueTitle = R.pathOr('', ['object_attributes', 'title'], req.body);
         const state = R.pathOr('', ['object_attributes', 'state'], req.body);
         const action = R.pathOr('', ['object_attributes', 'action'], req.body);
         if (action == "close" && state == "closed") {
-          md = `**${user}**在[${projName}](${projWebUrl})关闭了issue [[${issueTitle}](${issueUrl})]`;
+          md = `**${nickname}**在[${projName}](${projWebUrl})关闭了issue [[${issueTitle}](${issueUrl})]`;
         } else if (action == "open" && state == "opened") {
-          md = `**${user}**在[${projName}](${projWebUrl})新建了issue [[${issueTitle}](${issueUrl})]`;
+          md = `**${nickname}**在[${projName}](${projWebUrl})新建了issue [[${issueTitle}](${issueUrl})]`;
         }
         // md = `<font color=\"warning\">${user}</font>刚刚在 ${projName} 开了个issue [[${issueTitle}](${issueUrl})]`;
       }
