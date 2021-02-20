@@ -5,15 +5,20 @@ const HookHandler = (req, res) => {
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
   const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
-  const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目名称
+  const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
+  const resBody = {}
   if (!key) {
-    res.send({ success: false });
-  } {
+    resBody.success=false
+    resBody.step=1
+    res.send(resBody);
+  } else{
     let md = '';
     // 根据event_type类型返回消息
     switch (eventType) {
       case 'merge_request': {
         const user = R.pathOr('', ['user', 'name'], req.body);
+        const username = R.pathOr('', ['user', 'username'], req.body);
+        const nickname = nameMap[username] || user
         const srcBranch = R.pathOr('', ['object_attributes', 'source_branch'], req.body);
         const targetBranch = R.pathOr('', ['object_attributes', 'target_branch'], req.body);
         const url = R.pathOr('', ['object_attributes', 'url'], req.body);
@@ -22,13 +27,13 @@ const HookHandler = (req, res) => {
         const action = R.pathOr('', ['object_attributes', 'action'], req.body);
         if (action == 'open') {
           md =  `<font color="warning">${projName}项目有新的合并请求: </font>请相关同事注意。
-                  > 操作人: ${user}
+                  > 操作人: ${nickname}
                   > 分支名:[${title}](${url})  
                   > 详情: ${title} 到 ${targetBranch}`
         } else if (action == 'merge' && state == "merged") {
-          md = `${user}将分支[${srcBranch}]合并到[${targetBranch}]`;
+          md = `${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`;
           md =  `<font color="warning">${projName}项目有新的合并: </font>请相关同事注意。
-                > 详情: ${user}将分支[${srcBranch}]合并到[${targetBranch}]`
+                > 详情: ${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`
         }
       }
         break;
@@ -46,6 +51,9 @@ const HookHandler = (req, res) => {
         break;
       case 'push': {
         const userName = R.pathOr('', ['user_name'], req.body);
+        const username = R.pathOr('', ['user', 'user_username'], req.body);
+        const nickname = nameMap[username] || userName
+
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
         const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
@@ -53,22 +61,21 @@ const HookHandler = (req, res) => {
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
         const {  timestamp } = commits[0];
-        const beforeHash =  R.pathOr('', ['before'], req.body) 
-        const afterHash =  R.pathOr('', ['after'], req.body) 
-        const newBeforeHash = beforeHash.substring(before.length - 8);
-        const newAfterHash = afterHash.substring(after.length - 8);
-        const isCreate = beforeHash == '0000000000000000000000000000000000000000';
+        const beforeHash =  R.pathOr(null, ['before'], req.body) 
+        const isCreate = beforeHash === '0000000000000000000000000000000000000000';
+        const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
+        const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
         if (checkoutSha !== null ) {
           if (isCreate){
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
             > 分支名: [${refs}](${projWebUrl})
-            > 操作人: ${userName}
+            > 操作人: ${nickname}
             > 描述:${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}
             > 从 <font color="comment">${newBeforeHash}</font> 更新到 <font color="comment">${newAfterHash}</font>
             > 更新时间: ${timestamp}`
           }
         } else {
-          md = `${userName}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
+          md = `${nickname}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
         }
       }
         break;
@@ -78,11 +85,12 @@ const HookHandler = (req, res) => {
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
-          const mentionMembers = desc.match(/(@\S*\s)/ig)|| []
-          mentionMembers.map(m=>m.trim().slice(1))
+          let mentionMembers = desc.match(/(@\S*\s?)/ig)|| []
+          mentionMembers= mentionMembers.map(m=>m.trim().slice(1))
           let mentioned = ''
           if (mentionMembers.length){
-            mentioned = `并提及了${mentionMembers.map(m => '@' + nameMap[m]).join('')}`
+            resBody.memtion = mentionMembers
+            mentioned = `并提及了${mentionMembers.map(m =>  nameMap[m]? '@' + nameMap[m]:'@' + m ).join('')}`
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
@@ -116,6 +124,10 @@ const HookHandler = (req, res) => {
         break;
     }
     if (md) {
+      resBody.success=true
+      resBody.step=2
+      resBody.hasMd=true
+      resBody.md = md
       axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
                 //https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e852f98c-d928-43b6-991e-0e8faef8e68b
         "msgtype": "markdown",
@@ -124,10 +136,14 @@ const HookHandler = (req, res) => {
         }
       })
         .catch(function (error) {
+          resBody.success=false
+          resBody.step=3
+          resBody.hasMd=true
+          resBody.em=JSON.stringify(error)
           console.log(error);
         });
     }
-    res.send({ success: true});
+    res.send(resBody);
   }
 };
 
