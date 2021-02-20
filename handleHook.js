@@ -74,7 +74,7 @@ const HookHandler = (req, res) => {
             > 更新时间: ${timestamp}`
           }else{
             if(req.query.every_push){
-             const { url , title } = commits[0];
+             const { url , title, timestamp } = commits[0];
               md =  `${nickname}更新了远程分支[${refs}](${projWebUrl})
               > commit 说明: [${title}](${url}) 
               > commit 哈希: <font color="comment">${newAfterHash}</font>
