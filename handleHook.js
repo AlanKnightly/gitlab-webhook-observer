@@ -61,11 +61,11 @@ const HookHandler = (req, res) => {
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
         const beforeHash =  R.pathOr(null, ['before'], req.body) 
         const isCreate = beforeHash === '0000000000000000000000000000000000000000';
-        const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
-        const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
         if (checkoutSha !== null ) {
           if (isCreate){
             const {  timestamp } = commits[0];
+            const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
+            const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
             > 分支名: [${refs}](${projWebUrl})
             > 操作人: ${nickname}
