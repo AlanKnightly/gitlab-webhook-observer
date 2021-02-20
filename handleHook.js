@@ -53,7 +53,6 @@ const HookHandler = (req, res) => {
         const userName = R.pathOr('', ['user_name'], req.body);
         const username = R.pathOr('', ['user', 'user_username'], req.body);
         const nickname = nameMap[username] || userName
-
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
         const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
@@ -82,6 +81,8 @@ const HookHandler = (req, res) => {
       case 'note':
         {
           const user = R.pathOr('', ['user', 'name'], req.body);
+          const username = R.pathOr('', ['user', 'username'], req.body);
+          const nickname = nameMap[username] || user
           const url = R.pathOr('', ['object_attributes', 'url'], req.body);
           const noteableType = R.pathOr('', ['object_attributes', 'noteable_type'], req.body);
           const desc = R.pathOr('', ['object_attributes', 'description'], req.body);
@@ -94,15 +95,15 @@ const HookHandler = (req, res) => {
           }
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Commit") {
             const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
 
           } else if (noteableType == "Issue") {
             const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-            md = `**${user}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
+            md = `**${nickname}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
           }
         }
         break;
