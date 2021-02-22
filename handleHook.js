@@ -40,13 +40,15 @@ const HookHandler = (req, res) => {
       case 'tag_push': {
         const tagName = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
         const userName = R.pathOr('', ['user_name'], req.body);
+        const username = R.pathOr('', ['user_username'], req.body);
+        const nickname = nameMap[username] || userName
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const commits = R.pathOr([], ['commits'], req.body);
         const url = R.pathOr('', [`${commits.length - 1}`, 'url'], commits);
         const title = R.pathOr('', [`${commits.length - 1}`, 'title'], commits);
         const isCreate = R.pathOr('', ['before'], req.body) == '0000000000000000000000000000000000000000';
         const isDel = R.pathOr('', ['after'], req.body) == '0000000000000000000000000000000000000000';
-        md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n${isCreate ? `标签名：${tagName}\n` : ''}${isDel ? `被删除标签名：${tagName}\n` : ''}提交者：${userName}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
+        md = `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n${isCreate ? `标签名：${tagName}\n` : ''}${isDel ? `被删除标签名：${tagName}\n` : ''}提交者：${nickname}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
       }
         break;
       case 'push': {
@@ -59,19 +61,27 @@ const HookHandler = (req, res) => {
         const checkoutSha = R.pathOr(null, ['checkout_sha'], req.body);
         const totalCommitsCount = R.pathOr(0, ['total_commits_count'], req.body);
         const refs = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
-        const {  timestamp } = commits[0];
         const beforeHash =  R.pathOr(null, ['before'], req.body) 
         const isCreate = beforeHash === '0000000000000000000000000000000000000000';
-        const newBeforeHash = beforeHash.substring(beforeHash.length - 8);
-        const newAfterHash = checkoutSha.substring(checkoutSha.length - 8);
         if (checkoutSha !== null ) {
+          const newAfterHash = checkoutSha.substring(0, 8);
           if (isCreate){
+            const {  timestamp } = commits[0];
+            const newBeforeHash = beforeHash.substring(0, 8);
             md =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
             > 分支名: [${refs}](${projWebUrl})
             > 操作人: ${nickname}
             > 描述:${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}
             > 从 <font color="comment">${newBeforeHash}</font> 更新到 <font color="comment">${newAfterHash}</font>
             > 更新时间: ${timestamp}`
+          }else{
+            if(req.query.every_push){
+             const { url , title, timestamp } = commits[0];
+              md =  `${nickname}更新了远程分支[${refs}](${projWebUrl})
+              > commit 说明: [${title}](${url}) 
+              > commit 哈希: <font color="comment">${newAfterHash}</font>
+              > 更新时间: ${timestamp}`
+            }
           }
         } else {
           md = `${nickname}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
