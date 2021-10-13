@@ -54,7 +54,7 @@ const HookHandler = (req, res) => {
            "msg_type": "post",
            "content": {
             "post": {
-              "zh-cn": md
+              "zh-cn":  JSON.parse(JSON.stringify(md)) 
             }
           }
         },{
