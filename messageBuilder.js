@@ -25,6 +25,8 @@ const buildMessage = {
                       > 详情: ${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`
               }
             return ''
+        }else if(imType == 'fs'){
+
         }
 
     },

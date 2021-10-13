@@ -16,7 +16,7 @@ const HookHandler = (req, res) => {
       // 根据event_type类型返回消息
       md = buildMessage[eventType](req, imType)
     }catch(e){
-      md = 'err:'+e
+      // md = 'err:'+e
      console.log(e)
     }
     if (md) {
@@ -37,19 +37,22 @@ const HookHandler = (req, res) => {
           resBody.em=JSON.stringify(error)
           console.log(error);
         });
-      }else if(imType=='fs'){
-        // axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
-        //    "msg_type": "text",
-        //    "markdown": {
-        //    "content": md,
-        //   }
-        // }).catch(function (error) {
-        //   resBody.success=false
-        //   resBody.step=3
-        //   resBody.hasMd=true
-        //   resBody.em=JSON.stringify(error)
-        //   console.log(error);
-        // });
+      }
+      // else if(imType=='fs'){
+      //   axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
+      //      "msg_type": "post",
+      //      "content": {
+      //       "post": {
+      //         "zh-CN": md
+      //       }
+      //     }
+      //   }).catch(function (error) {
+      //     resBody.success=false
+      //     resBody.step=3
+      //     resBody.hasMd=true
+      //     resBody.em=JSON.stringify(error)
+      //     console.log(error);
+      //   });
       }
     }
     res.send(resBody);
