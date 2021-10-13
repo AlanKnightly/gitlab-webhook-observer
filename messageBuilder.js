@@ -383,6 +383,12 @@ const buildMessage = {
                         "text": `${mentioned}`
                       }
                     ],
+                    [
+                      {
+                        "tag": "text",
+                        "text": `"${String(desc).slice(10)}..."`
+                      }
+                    ]
                   ]
             }
           } else if (noteableType == "Commit") {
