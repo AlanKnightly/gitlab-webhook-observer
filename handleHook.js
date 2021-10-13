@@ -54,11 +54,24 @@ const HookHandler = (req, res) => {
            "msg_type": "post",
            "content": {
             "post": {
-              "zh-cn":  JSON.parse(JSON.stringify(md)) 
+              "zh-cn": md
             }
           }
         },{
           headers: {'Content-Type': 'application/json'}
+        }).then((res)=>{
+          axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=40ab1ae0-bf95-4db5-b7ee-3d9550a9b30e`, {
+            "msgtype": "markdown",
+            "markdown": {
+            "content": res.msg,
+           }
+         }).catch(function (error) {
+           resBody.success=false
+           resBody.step=3
+           resBody.hasMd=true
+           resBody.em=JSON.stringify(error)
+           console.log(error);
+         });
         }).catch(function (error) {
         //   axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
         //     "msg_type": "text",
