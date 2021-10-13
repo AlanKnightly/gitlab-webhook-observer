@@ -13,7 +13,7 @@ const listenedType = [
 const HookHandler = (req, res) => {
   const key = req.params.key;
   const eventType = R.pathOr('', ['object_kind'], req.body);  //事件类型
-  const imType = req.params.im || 'wx'
+  const imType = req.query.im || 'wx'
   const resBody = {}
   if (!key) {
     resBody.success=false
@@ -54,39 +54,12 @@ const HookHandler = (req, res) => {
            "msg_type": "post",
            "content": {
             "post": {
-              "zh-cn": md
+              "zh-cn":  md
             }
           }
         },{
           headers: {'Content-Type': 'application/json'}
-        }).then((res)=>{
-          axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=40ab1ae0-bf95-4db5-b7ee-3d9550a9b30e`, {
-            "msgtype": "markdown",
-            "markdown": {
-            "content": res.msg,
-           }
-         }).catch(function (error) {
-           resBody.success=false
-           resBody.step=3
-           resBody.hasMd=true
-           resBody.em=JSON.stringify(error)
-           console.log(error);
-         });
         }).catch(function (error) {
-          axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=40ab1ae0-bf95-4db5-b7ee-3d9550a9b30e`, {
-            "msgtype": "markdown",
-            "markdown": {
-            "content": JSON.stringify(error),
-           }
-         }).catch(function (error) {
-           resBody.success=false
-           resBody.step=3
-           resBody.hasMd=true
-           resBody.em=JSON.stringify(error)
-           console.log(error);
-         });
-
-
           resBody.success=false
           resBody.step=3
           resBody.hasMd=true
