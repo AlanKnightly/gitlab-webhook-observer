@@ -28,7 +28,7 @@ const buildMessage = {
         }
 
     },
-    'tag_push':function(req){
+    'tag_push':function(req,imType){
         const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
         const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
         const tagName = R.pathOr('', ['ref'], req.body).split('/').slice(2).join('/');
@@ -45,7 +45,7 @@ const buildMessage = {
           return `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n${isCreate ? `标签名：${tagName}\n` : ''}${isDel ? `被删除标签名：${tagName}\n` : ''}提交者：${nickname}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
         }
     },
-    'push':function(req){
+    'push':function(req,imType){
         const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
         const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
         const userName = R.pathOr('', ['user_name'], req.body);
@@ -87,7 +87,7 @@ const buildMessage = {
               return content
         }
     },
-    'note':function(req){
+    'note':function(req,imType){
         const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
         const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
         const user = R.pathOr('', ['user', 'name'], req.body);
@@ -120,7 +120,7 @@ const buildMessage = {
             return content
         }
     },
-    'issue':function(req){
+    'issue':function(req,imType){
         const projName = R.pathOr('', ['project', 'name'], req.body); // 项目名称
         const projWebUrl = R.pathOr('', ['project', 'web_url'], req.body); // 项目地址
         const user = R.pathOr('', ['user', 'name'], req.body);
