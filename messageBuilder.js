@@ -366,7 +366,7 @@ const buildMessage = {
           if (noteableType === "MergeRequest") {
             const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
             content = {
-              "title": "远程分支推送",
+              "title": "评论",
                   "content": [
                     [
                       {
@@ -388,7 +388,7 @@ const buildMessage = {
           } else if (noteableType == "Commit") {
             const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
             content = {
-              "title": "远程分支推送",
+              "title": "评论",
                   "content": [
                     [
                       {
@@ -411,7 +411,7 @@ const buildMessage = {
           } else if (noteableType == "Issue") {
             const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
             content = {
-              "title": "远程分支推送",
+              "title": "评论",
                   "content": [
                     [
                       {
@@ -454,7 +454,7 @@ const buildMessage = {
         }else if(imType == 'fs'){
           if (action == "close" && state == "closed") {
             content = {
-              "title": "远程分支推送",
+              "title": "Issue关闭",
                   "content": [
                     [
                       {
@@ -485,7 +485,7 @@ const buildMessage = {
         } else if (action == "open" && state == "opened") {
             content = `**${nickname}**在[${projName}](${projWebUrl})新建了issue [[${issueTitle}](${issueUrl})]`;
             content = {
-              "title": "远程分支推送",
+              "title": "Issue新增",
                   "content": [
                     [
                       {
