@@ -57,6 +57,8 @@ const HookHandler = (req, res) => {
               "zh-CN": md
             }
           }
+        },{
+          headers: {'Content-Type': 'application/json'}
         }).catch(function (error) {
           resBody.success=false
           resBody.step=3
