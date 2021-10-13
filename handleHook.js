@@ -51,43 +51,29 @@ const HookHandler = (req, res) => {
       }
       else if(imType=='fs'){
         axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
-          "msg_type": "text",
-          "content": {
-              "text": key
-          }
-       },{
-         headers: {'Content-Type': 'application/json'}
-       }).catch(function (error) {
-         resBody.success=false
-         resBody.step=3
-         resBody.hasMd=true
-         resBody.em=JSON.stringify(error)
-         console.log(error);
-       });
-        axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
            "msg_type": "post",
            "content": {
             "post": {
-              "zh-CN": md
+              "zh-cn": md
             }
           }
         },{
           headers: {'Content-Type': 'application/json'}
         }).catch(function (error) {
-          axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
-            "msg_type": "text",
-            "content": {
-                "text": 'err'
-            }
-         },{
-           headers: {'Content-Type': 'application/json'}
-         }).catch(function (error) {
-           resBody.success=false
-           resBody.step=3
-           resBody.hasMd=true
-           resBody.em=JSON.stringify(error)
-           console.log(error);
-         });
+        //   axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
+        //     "msg_type": "text",
+        //     "content": {
+        //         "text": 'err'
+        //     }
+        //  },{
+        //    headers: {'Content-Type': 'application/json'}
+        //  }).catch(function (error) {
+        //    resBody.success=false
+        //    resBody.step=3
+        //    resBody.hasMd=true
+        //    resBody.em=JSON.stringify(error)
+        //    console.log(error);
+        //  });
 
 
           resBody.success=false
