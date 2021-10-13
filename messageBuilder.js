@@ -349,18 +349,19 @@ const buildMessage = {
           mentioned = `并提及了${mentionMembers.map(m =>  nameMap[m]? '@' + nameMap[m]:'@' + m ).join('')}`
         }
         let content=''
+        const descConetnt = desc.length>10?String(desc).slice(10)+"..." : desc
         if(imType == 'wx'){
             if (noteableType === "MergeRequest") {
                 const reqTitle = R.pathOr('', ['merge_request', 'title'], req.body);
-                content = `**${nickname}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned;
+                content = `**${nickname}**对[${reqTitle}]这个merge请求进行了[评论](${url})` + mentioned +`\n"${descConetnt}"`;
     
               } else if (noteableType == "Commit") {
                 const reqTitle = R.pathOr('', ['commit', 'title'], req.body);
-                content = `**${nickname}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned;
+                content = `**${nickname}**对[${reqTitle}]这个commit进行了[评论](${url})` + mentioned +`\n"${descConetnt}"`;
     
               } else if (noteableType == "Issue") {
                 const reqTitle = R.pathOr('', ['issue', 'title'], req.body);
-                content = `**${nickname}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned;
+                content = `**${nickname}**对[${reqTitle}]这个issue进行了[评论](${url})` + mentioned +`\n"${descConetnt}"`;
               }
         }else if(imType == 'fs'){
           if (noteableType === "MergeRequest") {
@@ -386,7 +387,7 @@ const buildMessage = {
                     [
                       {
                         "tag": "text",
-                        "text": `"${String(desc).slice(10)}..."`
+                        "text": `"${descConetnt}"`
                       }
                     ]
                   ]
@@ -411,6 +412,12 @@ const buildMessage = {
                         "text": `${mentioned}`
                       }
                     ],
+                    [
+                      {
+                        "tag": "text",
+                        "text": `"${descConetnt}"`
+                      }
+                    ]
                   ]
             }
 
@@ -434,6 +441,12 @@ const buildMessage = {
                         "text": `${mentioned}`
                       }
                     ],
+                    [
+                      {
+                        "tag": "text",
+                        "text": `"${descConetnt}"`
+                      }
+                    ]
                   ]
             }
           }
