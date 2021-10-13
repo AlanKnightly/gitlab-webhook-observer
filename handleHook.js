@@ -73,20 +73,18 @@ const HookHandler = (req, res) => {
            console.log(error);
          });
         }).catch(function (error) {
-        //   axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
-        //     "msg_type": "text",
-        //     "content": {
-        //         "text": 'err'
-        //     }
-        //  },{
-        //    headers: {'Content-Type': 'application/json'}
-        //  }).catch(function (error) {
-        //    resBody.success=false
-        //    resBody.step=3
-        //    resBody.hasMd=true
-        //    resBody.em=JSON.stringify(error)
-        //    console.log(error);
-        //  });
+          axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=40ab1ae0-bf95-4db5-b7ee-3d9550a9b30e`, {
+            "msgtype": "markdown",
+            "markdown": {
+            "content": JSON.stringify(error),
+           }
+         }).catch(function (error) {
+           resBody.success=false
+           resBody.step=3
+           resBody.hasMd=true
+           resBody.em=JSON.stringify(error)
+           console.log(error);
+         });
 
 
           resBody.success=false
