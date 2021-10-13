@@ -23,7 +23,7 @@ const HookHandler = (req, res) => {
       resBody.step=2
       resBody.hasMd=true
       resBody.md = md
-      if(!imType){
+      if(imType=='wx'){
         axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
            "msgtype": "markdown",
            "markdown": {
