@@ -23,7 +23,7 @@ const HookHandler = (req, res) => {
     let md = ''; 
     try{
       // 根据event_type类型返回消息
-      md = buildMessage[eventType](req, imType)
+      md = buildMessage[eventType](req, imType) ||''
     }catch(e){
       if(listenedType.includes(eventType)){
         md = `eventType:${eventType}; err: ${e}`
