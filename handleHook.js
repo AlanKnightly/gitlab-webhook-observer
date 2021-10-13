@@ -50,6 +50,25 @@ const HookHandler = (req, res) => {
         });
       }
       else if(imType=='fs'){
+        axios.post(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${key}`, {
+          "msgtype": "markdown",
+          "markdown": {
+          "content": JSON.stringify({
+            "msg_type": "post",
+            "content": {
+             "post": {
+               "zh-CN": md
+             }
+           }
+         }),
+         }
+       }).catch(function (error) {
+         resBody.success=false
+         resBody.step=3
+         resBody.hasMd=true
+         resBody.em=JSON.stringify(error)
+         console.log(error);
+       });
         axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
            "msg_type": "post",
            "content": {
