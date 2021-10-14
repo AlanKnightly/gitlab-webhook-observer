@@ -72,7 +72,7 @@ const HookHandler = (req, res) => {
           axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
             "msg_type": "text",
             "content": {
-             "text": 'error: ' + JSON.stringify(error) + '|||'+ JSON.stringify(md)
+             "text": error
            }
          },{
            headers: {'Content-Type': 'application/json'}
