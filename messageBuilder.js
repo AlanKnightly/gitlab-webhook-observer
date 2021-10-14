@@ -35,12 +35,12 @@ const buildMessage = {
             .addLine(`操作人: ${nickname}`)
             .addLine(`分支名: `,[title, url])
             .addLine(`详情: ${title} 到 ${targetBranch}`)
-            .content
+            .post
           } else if (action == 'merge' && state == "merged") {
             content = fsMessenger.setTitle("代码被合并")
             .addLine(`${projName}项目有新的合并,请相关同事注意。`)
             .addLine(`详情: ${nickname}将分支[${srcBranch}]合并到[${targetBranch}]`)
-            .content
+            .post
           }
         }
         return content
@@ -73,7 +73,7 @@ const buildMessage = {
           }
           fsMessenger.addLine(`提交者：${nickname}`)
           .addLine( `详情：`, totalCommitsCount?[title, url]: '该分支无新commit' )
-          return fsMessenger.content
+          return fsMessenger.post
         }
         return ''
     },
@@ -115,7 +115,7 @@ const buildMessage = {
                     .addLine( `描述: `, totalCommitsCount? [title, url]:`该分支无新commit`)
                     .addLine(`从${newBeforeHash}更新到 ${newAfterHash}`)
                     .addLine(`更新时间: ${timestamp}`)
-                    .content
+                    .post
                   }
                 }else{
                   if(req.query.every_push){
@@ -132,7 +132,7 @@ const buildMessage = {
                     .addLine(`commit 说明: `, [title, url])
                     .addLine(`commit 哈希: ${newAfterHash}`)
                     .addLine(`更新时间: ${timestamp}`)
-                    .content
+                    .post
                    }
                   }
                 }
@@ -143,7 +143,7 @@ const buildMessage = {
                   const fsMessenger = new FSMessenger()
                   content = fsMessenger.setTitle("远程分支删除")
                   .addLine(`${nickname}删除了项目`,[projName, projWebUrl],`的远程分支[${refs}]`)
-                  .content
+                  .post
                 }
               }
               return content
@@ -188,7 +188,7 @@ const buildMessage = {
           content = fsMessenger
           .addLine(`${nickname} 对[${reqTitle}]这个${notableTypeMap[notableType]}进行了`, [`评论`,url], mentioned)
           .addLine(`"${descContent}"`)
-          .content
+          .post
         }
         return content
     },
@@ -215,7 +215,7 @@ const buildMessage = {
           const fsMessenger = new FSMessenger()
           content = fsMessenger.setTitle("Issue关闭")
           .addLine(`${nickname} 在`, [projName, projWebUrl],`${actionWord}了issue [`,[issueTitle, issueUrl],`]`)
-          .content
+          .post
         }
         return content
     },
