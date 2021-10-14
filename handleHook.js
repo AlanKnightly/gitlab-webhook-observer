@@ -63,7 +63,7 @@ const HookHandler = (req, res) => {
           axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
            "msg_type": "text",
            "content": {
-            "text": JSON.stringify(res)
+            "text": 'res: ' + JSON.stringify(res)  + '|||'+  JSON.stringify(md)
           }
         },{
           headers: {'Content-Type': 'application/json'}
@@ -72,7 +72,7 @@ const HookHandler = (req, res) => {
           axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
             "msg_type": "text",
             "content": {
-             "text": JSON.stringify(error)
+             "text": 'error: ' + JSON.stringify(error) + '|||'+ JSON.stringify(md)
            }
          },{
            headers: {'Content-Type': 'application/json'}
