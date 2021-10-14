@@ -214,7 +214,7 @@ const buildMessage = {
         }else if(imType == 'fs'){
           const fsMessenger = new FSMessenger()
           content = fsMessenger.setTitle("Issue关闭")
-          .addLine(`${nickname} 在`, [projName, projWebUrl],`${actionWord}了issue [`,[issueTitle, issueUrl],`]`)
+          .addLine(`${nickname} 在`, [projName, projWebUrl],`${actionWord}(${action})了issue [`,[issueTitle, issueUrl],`]`)
           .post
         }
         return content
