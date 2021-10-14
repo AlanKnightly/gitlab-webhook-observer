@@ -28,7 +28,7 @@ const buildMessage = {
               }
             return content
         }else if(imType == 'fs'){
-          const fsMessenger = FSMessenger()
+          const fsMessenger = new FSMessenger()
           if (action == 'open') {
             content = fsMessenger.setTitle("合并请求")
             .addLine(`${projName}项目有新的合并请求:`)
@@ -61,7 +61,7 @@ const buildMessage = {
         if(imType == 'wx'){
           return `项目[${projName}](${projWebUrl})刚刚收到一次tag push提交\n${isCreate ? `标签名：${tagName}\n` : ''}${isDel ? `被删除标签名：${tagName}\n` : ''}提交者：${nickname}\n详情：${totalCommitsCount ? `[${title}](${url})` : `该分支无新commit`}`;
         }else if(imType == 'fs'){
-          const fsMessenger = FSMessenger()
+          const fsMessenger = new FSMessenger()
           fsMessenger.setTitle("新的Tag Push提交")
           .addLine('项目',[projName, projWebUrl],'刚刚收到一次tag push提交')
 
@@ -107,7 +107,7 @@ const buildMessage = {
                     > 从 <font color="comment">${newBeforeHash}</font> 更新到 <font color="comment">${newAfterHash}</font>
                     > 更新时间: ${timestamp}`
                   }else if (imType == 'fs'){
-                    const fsMessenger = FSMessenger()
+                    const fsMessenger = new FSMessenger()
                     content =  fsMessenger.setTitle("远程分支推送")
                     .addLine( `${projName}项目有更新变化,请相关同事注意.`)
                     .addLine(`分支名: `, [refs, projWebUrl])
@@ -126,7 +126,7 @@ const buildMessage = {
                     > commit 哈希: <font color="comment">${newAfterHash}</font>
                     > 更新时间: ${timestamp}`
                    }else if(imType == 'fs'){
-                    const fsMessenger = FSMessenger()
+                    const fsMessenger = new FSMessenger()
                     content = fsMessenger.setTitle("远程分支更新")
                     .addLine(`${nickname}更新了远程分支`, [refs, projWebUrl])
                     .addLine(`commit 说明: `, [title, url])
@@ -140,7 +140,7 @@ const buildMessage = {
                 if(imType == 'wx'){
                   content = `${nickname}删除了项目[${projName}](${projWebUrl})的远程分支[${refs}]`;
                 }else if(imType == 'fs'){
-                  const fsMessenger = FSMessenger()
+                  const fsMessenger = new FSMessenger()
                   content = fsMessenger.setTitle("远程分支删除")
                   .addLine(`${nickname}删除了项目`,[projName, projWebUrl],`的远程分支[${refs}]`)
                   .content
@@ -183,7 +183,7 @@ const buildMessage = {
         if(imType == 'wx'){
           content = `**${nickname}**对[${reqTitle}]这个${notableTypeMap[notableType]}进行了[评论](${url})` + mentioned +`\n"${descContent}"`;
         }else if(imType == 'fs'){
-          const fsMessenger = FSMessenger()
+          const fsMessenger = new FSMessenger()
           fsMessenger.setTitle("评论")
           content = fsMessenger
           .addLine(`${nickname} 对[${reqTitle}]这个${notableTypeMap[notableType]}进行了`, [`评论`,url], mentioned)
@@ -212,7 +212,7 @@ const buildMessage = {
         if(imType == 'wx'){
           content = `**${nickname}**在[${projName}](${projWebUrl})${actionWord}了issue [[${issueTitle}](${issueUrl})]`;
         }else if(imType == 'fs'){
-          const fsMessenger = FSMessenger()
+          const fsMessenger = new FSMessenger()
           content = fsMessenger.setTitle("Issue关闭")
           .addLine(`${nickname} 在`, [projName, projWebUrl],`${actionWord}了issue [`,[issueTitle, issueUrl],`]`)
           .content
