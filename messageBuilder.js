@@ -165,7 +165,7 @@ const buildMessage = {
           // resBody.memtion = mentionMembers
           mentioned = `并提及了${mentionMembers.map(m =>  nameMap[m]? '@' + nameMap[m]:'@' + m ).join('')}`
         }
-        const descContent = desc.length>10?String(desc).slice(10)+"..." : desc
+        const descContent = desc.length>10?String(desc).slice(0,10)+"..." : desc
         const notableTypeMap = {
           MergeRequest: 'merge请求',
           Commit: 'commit',
