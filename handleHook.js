@@ -59,7 +59,24 @@ const HookHandler = (req, res) => {
           }
         },{
           headers: {'Content-Type': 'application/json'}
+        }).then(res=>{
+          axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
+           "msg_type": "text",
+           "content": {
+            "text": JSON.stringify(res)
+          }
+        },{
+          headers: {'Content-Type': 'application/json'}
+        })
         }).catch(function (error) {
+          axios.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${key}`, {
+            "msg_type": "text",
+            "content": {
+             "text": JSON.stringify(error)
+           }
+         },{
+           headers: {'Content-Type': 'application/json'}
+         })
           resBody.success=false
           resBody.step=3
           resBody.hasMd=true
