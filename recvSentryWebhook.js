@@ -28,6 +28,7 @@ const axios = require('axios');
 const nameMap = require('./nameMap.json')
 const HookHandler = (req, res) => {
   const imType = req.query.im || 'wx'
+  const key = req.params.key;
   const { body } = req;
 
   if (body) {
