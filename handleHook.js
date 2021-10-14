@@ -2,7 +2,7 @@ const R = require('ramda');
 const axios = require('axios');
 const buildMessage = require('./messageBuilder')
 
-const listenedType = [
+const enabledEventTypes = [
   'merge_request',
   'tag_push',
   'push',
@@ -25,7 +25,7 @@ const HookHandler = (req, res) => {
       // 根据event_type类型返回消息
       md = buildMessage[eventType](req, imType) ||''
     }catch(e){
-      if(listenedType.includes(eventType)){
+      if(enabledEventTypes.includes(eventType)){
         md = `eventType:${eventType}; err: ${e}`
       }
      console.log(e)
