@@ -95,9 +95,9 @@ const buildMessage = {
             if (checkoutSha !== null ) {
                 const newAfterHash = checkoutSha.substring(0, 8);
                 if (isCreate){
-                  const {  timestamp } = commits[0];
                   // commits[0]为undefined表示已经移除改分支，不必为之推送消息
                   if(commits[0] == undefined) return ''
+                  const {  timestamp } = commits[0];
                   const newBeforeHash = beforeHash.substring(0, 8);
                   if(imType == 'wx'){
                     content =  `<font color="warning">${projName}项目有更新变化: </font>请相关同事注意。
